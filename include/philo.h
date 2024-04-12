@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:24:08 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/10 17:59:30 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:35:15 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/time.h>
 // define
 
 // structs
@@ -50,11 +51,12 @@
 typedef struct s_data
 {
 	int philo_nb;
+	long	start_time;
 	int dead_flag;
 	int ttd;
 	int tte;
 	int tts;
-	int number_of_times_each_philosopher_must_eat;
+	int total_meals;
 	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t	*write_lock;
 }	t_data;
@@ -62,6 +64,8 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int id;
+	long time_of_death;
+	long time_lst_meal;
 	int meals_eaten;
 	pthread_t thread;
 	pthread_mutex_t *fork;
@@ -73,6 +77,8 @@ typedef struct s_philo
 void	free_all(t_philo *philo_lst, t_data *data);
 void	ft_free_lst(t_philo *head, t_data *data);
 void	ft_free_mutex(t_data *data, t_philo *philo);
+void	ft_free_philos_data(t_philo *philo);
+void ft_destroy_mutex(t_philo *philo_lst);
 
 //control (parsing)
 int	control_args(int ac,char **av);
@@ -86,10 +92,14 @@ void	fill_philo_lst(t_data *data, t_philo **philo_lst);
 void	init_data(t_data *data, char **av);
 void	init_philo(char **av, t_data *data, t_philo **philo_lst);
 void	init_philo_lst(t_data *data);
-int	init_mutex(t_data *data, t_philo *philo_lst);
+// int	init_mutex(t_data *data, t_philo *philo_lst);
+int	init_mutex(t_philo *philo_lst);
 
 //threads.c
 int	open_threads(t_data *data, t_philo *philo);
+
+//get_time.c
+long ft_get_time_in_ms(void);
 
 //utils.c
 void	ft_print_lst(t_philo *philo, t_data *data);

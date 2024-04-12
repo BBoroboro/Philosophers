@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:47:53 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/10 17:28:01 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:25:16 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ void	init_philo(char **av, t_data *data, t_philo **philo_lst)
 void	init_data(t_data *data, char **av)
 {
 	data->philo_nb = ft_atoi(av[1]);
-	data->ttd = ft_atoi(av[2]);
-	data->tte = ft_atoi(av[3]);
-	data->tts = ft_atoi(av[4]);
+	data->start_time = ft_get_time_in_ms();
+	data->ttd = ft_atoi(av[2]) / 1000;
+	data->tte = ft_atoi(av[3]) / 1000;
+	data->tts = ft_atoi(av[4]) / 1000;
 	if (av[5])
-		data->number_of_times_each_philosopher_must_eat = ft_atoi(av[5]);
+		data->total_meals = ft_atoi(av[5]);
 }
 
 
@@ -56,25 +57,18 @@ void	fill_philo_lst(t_data *data, t_philo **first_philo)
 			prev_philo = prev_philo->next;
 		}
 		new_philo->id = i;
-		// prev_philo = prev_philo->next;
+		new_philo->data = data;
 		i++;
 	}
 	prev_philo->next = *first_philo;
 }
 
-
-// void	init_philo_lst(t_data *data)
-// {
-// 	data->philo_lst = malloc(sizeof(t_philo *));
-// 	// protect malloc
-// }
-
-int	init_mutex(t_data *data, t_philo *philo)
+int	init_mutex(t_philo *philo)
 {
 	int	i;
 
 	i = 1;
-	while(i <= data->philo_nb)
+	while(i <= philo->data->philo_nb)
 	{
 		philo->fork = malloc(sizeof(pthread_mutex_t)); 
 		if (pthread_mutex_init(philo->fork, NULL))
@@ -85,14 +79,14 @@ int	init_mutex(t_data *data, t_philo *philo)
 		philo = philo->next;
 		i++;
 	}
-	data->meal_lock = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(data->meal_lock, NULL))
+	philo->data->meal_lock = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->meal_lock, NULL))
 	{
 		//need a cleanup function for mutex here
 		return (1);
 	}
-	data->write_lock = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(data->write_lock, NULL))
+	philo->data->write_lock = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->write_lock, NULL))
 	{
 		//need a cleanup function for mutex here
 		return (1);

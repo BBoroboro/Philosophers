@@ -6,43 +6,70 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:24:21 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/10 18:12:56 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/12 17:37:05 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*routine_philo(void *arg)
+void	*routine_philo(void *arg) // exemple
 {	
 	t_philo *philo;
-	pthread_mutex_t print;
 
 	philo = (t_philo *)arg;
 	int i;
 	i = 0;
-	pthread_mutex_init(&print, NULL);
-	while (i < 6)//while(philo->data->dead_flag == 0)
+	// while (i < philo->data->total_meals)//while(philo->data->dead_flag == 0)
+	// {
+	pthread_mutex_lock(philo->fork);
+	pthread_mutex_lock(philo->next->fork);
+	philo->time_lst_meal = ft_get_time_in_ms();
+	printf("%ld Philo n %d is eating\n", philo->time_lst_meal, philo->id);
+	pthread_mutex_unlock(philo->fork);
+	pthread_mutex_unlock(philo->next->fork);
+	sleep(philo->data->tte);
+	long end_meal = ft_get_time_in_ms();
+	printf("%ld Philo n %d finished eating\n", end_meal, philo->id);
+	if (philo->time_lst_meal - end_meal < 0)
 	{
-		pthread_mutex_lock(&print);
-		printf("Test from thread\n");
-		pthread_mutex_unlock(&print);
-		sleep(3);
-		i++;
+		philo->time_of_death = ft_get_time_in_ms();
+		printf("%ld Philo n %d is dead\n", philo->time_of_death, philo->id);
+		exit(EXIT_SUCCESS);
 	}
-	pthread_mutex_destroy(&print);
-	printf("Ending thread\n");
+		// i++;
+	// }
+
+	// printf("Ending thread\n");
 	return (NULL);
 }
 
-// int	open_thread_monitor(t_data *data)
-// {}
+// void	*routine_check(void *arg)
+// {
+	
+// }
+
+// int	open_thread_monitor(t_data *data, t_philo *philo)
+// {
+// 	pthread_t monitor;
+	
+// 	if(pthread_create(monitor, NULL, &routine_check, philo));
+// 	{
+// 	perror("Failed to create thread\n");
+// 	return (1);
+// 	}
+// 	while(philo)
+// 	{
+		
+// 	}
+// 	if (pthread_join(philo->thread, NULL) != 0)
+// 		return (1);
+// }
+
 
 int	open_threads(t_data *data, t_philo *philo)
 {
 	int i;
-	pthread_mutex_t mutex;
 
-	pthread_mutex_init(&mutex, NULL);
 	i = 1;
 	while (i <= data->philo_nb)
 	{
@@ -64,6 +91,5 @@ int	open_threads(t_data *data, t_philo *philo)
 		philo = philo->next;
 		i++;
 	}
-	pthread_mutex_destroy(&mutex);
 	return (0);
 }
