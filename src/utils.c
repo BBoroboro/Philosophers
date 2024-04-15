@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 14:25:51 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/12 12:13:11 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/15 11:22:23 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	ft_print_lst(t_philo *philo_lst, t_data *data)
 	while (i <= data->philo_nb)
 	{
 		printf("--- philo n.%d ---\n", philo->id);
+		printf("data ttd = %d", philo->data->tte);
 		printf("-----------------\n\n");
 		philo = philo->next;
 		i++;
@@ -101,5 +102,24 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	if (!dest)
 		return (NULL);
 	ft_bzero(dest, nmemb * size);
+	return (dest);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+	char	*dst;
+
+	if (!dest && !src)
+		return (NULL);
+	dst = (char *)dest;
+	i = 0;
+	while (i < n)
+	{
+		*dst = (*(char *)src);
+		dst++;
+		src++;
+		i++;
+	}
 	return (dest);
 }

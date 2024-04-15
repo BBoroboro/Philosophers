@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:50:45 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/12 15:25:18 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/15 11:39:04 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,22 @@ void	ft_free_mutex(t_data *data, t_philo *philo)
 		temp = philo;
 		philo = philo->next;
 		if (temp->fork)
+		{
+			pthread_mutex_destroy(temp->fork);
 			free(temp->fork);
+		}
 		i++;
 	}
 	if (data->meal_lock)
+	{
+		pthread_mutex_destroy(data->meal_lock);
 		free(data->meal_lock);
+	}
 	if (data->write_lock)
-		free(data->write_lock);	
+	{
+		pthread_mutex_destroy(data->write_lock);
+		free(data->write_lock);
+	}
 }
 
 void ft_destroy_mutex(t_philo *philo_lst)
@@ -88,3 +97,28 @@ void ft_destroy_mutex(t_philo *philo_lst)
 		i++;
 	}
 }
+
+// void ft_destroy_mutex(t_philo *philo)
+// {
+//     while (philo)
+// 	{
+//         if (philo->fork) 
+// 		{
+//            // pthread_mutex_destroy(philo->fork);
+//             //free(philo->fork);
+//         }
+//         philo = philo->next;
+//     }
+
+//     // Clean up meal lock
+//     if (philo && philo->data->meal_lock) {
+//         //pthread_mutex_destroy(philo->data->meal_lock);
+//         //free(philo->data->meal_lock);
+//     }
+
+//     // Clean up write lock
+//     if (philo && philo->data->write_lock) {
+//         //pthread_mutex_destroy(philo->data->write_lock);
+//         //free(philo->data->write_lock);
+//     }
+// }

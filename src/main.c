@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:23:40 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/12 16:04:15 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:35:27 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	main(int ac, char **av)
 	// 	printf("--------- philo n %d has %d tte\n", philo_lst->id, philo_lst->data->tte);
 	// 	philo_lst = philo_lst->next;
 	// }
-	// ft_print_lst(philo_lst, &data);
-	printf("the program start at %ld millisec\n", philo_lst->data->start_time);
+	//ft_print_lst(philo_lst, &data);
+	//printf("the program start at %ld millisec\n", philo_lst->data->start_time);
 	init_mutex(philo_lst);
 	open_threads(&data, philo_lst);
 	

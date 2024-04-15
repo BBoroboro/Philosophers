@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:24:08 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/12 17:35:15 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:57:58 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 typedef struct s_data
 {
 	int philo_nb;
+	int dead_philo_id;
 	long	start_time;
 	int dead_flag;
 	int ttd;
@@ -97,9 +98,11 @@ int	init_mutex(t_philo *philo_lst);
 
 //threads.c
 int	open_threads(t_data *data, t_philo *philo);
+void	ft_simulation(t_philo *philo);
 
 //get_time.c
 long ft_get_time_in_ms(void);
+int	ft_action(t_philo *philo, long time);
 
 //utils.c
 void	ft_print_lst(t_philo *philo, t_data *data);
@@ -107,6 +110,6 @@ int	ft_lst_size(t_philo **lst);
 long	ft_atoi(const char *str);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_memset(void *s, int c, size_t n);
-
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif
