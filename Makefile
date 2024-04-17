@@ -6,7 +6,7 @@
 #    By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 16:03:47 by mamoulin          #+#    #+#              #
-#    Updated: 2024/04/12 16:04:43 by mamoulin         ###   ########.fr        #
+#    Updated: 2024/04/16 16:50:47 by mamoulin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRC1 = ./src/main.c \
 		./src/free_functions.c \
 		./src/threads.c \
 		./src/get_time.c \
+		./src/actions.c \
 		./src/utils.c 
 
 SRC2 =	

@@ -6,13 +6,27 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:24:21 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/15 18:59:42 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:01:31 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*routine_philo(void *arg) // exemple
+void	ft_one_philo(t_philo *philo)
+{
+	pthread_mutex_lock(philo->fork);
+	pthread_mutex_lock(philo->data->write_lock);
+	printf("%ld Philo %d has taken a fork\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
+	pthread_mutex_unlock(philo->data->write_lock);
+	pthread_mutex_unlock(philo->fork);
+	usleep(philo->data->ttd * 1000);
+	
+	pthread_mutex_lock(philo->data->write_lock);
+	printf("%ld Philo %d died\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
+	pthread_mutex_unlock(philo->data->write_lock);
+}
+
+void	*routine_philo(void *arg)
 {	
 	t_philo *philo;
 
@@ -21,58 +35,54 @@ void	*routine_philo(void *arg) // exemple
 	i = 0;
 	if (philo->data->philo_nb == 1)
 	{
-		// here need a function to make him die and free all
+		ft_one_philo(philo);
+		return (NULL);
 	}
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 != 0)
 	{
-		usleep(philo->data->tts * 1000); // see the sleep time
+		ft_thinking(philo);
+		usleep(philo->data->tts * 1000); // plutot tte que tts
 	}
-	ft_simulation(philo);
+	while(philo->data->dead_flag == 0 && philo->data->full_flag == 0)
+	{
+		ft_simulation(philo);
+	}
 	return (NULL);
 }
 
 void	ft_simulation(t_philo *philo)
-{
-	//philo->data->start_time = ft_get_time_in_ms(); // already initialized in the init functions
-	
-	while(philo->meals_eaten < philo->data->total_meals) // another condition if meals eaten isnt in the parameters
-	{
-		//printf("--------- %d meals to eat\n", philo->data->total_meals);
-		
-		pthread_mutex_lock(philo->fork);
-		printf("%ld Philo n %d has taken a fork\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
-		pthread_mutex_lock(philo->next->fork);
-		printf("%ld Philo n %d has taken a 2nd fork\n", ft_get_time_in_ms() - philo->data->start_time, philo->id); // erase 2nd
-		
-		printf("%ld Philo n %d is eating\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
-		philo->time_lst_meal = ft_get_time_in_ms();
-		
+{	
+	//printf("TEST\n");
+	//while(philo->data->total_meals == 0 || philo->meals_eaten < philo->data->total_meals) // another condition if meals eaten isnt in the parameters
+	while(philo->data->dead_flag == 0 && philo->data->full_flag == 0)
+	{	
+		//printf("TEST\n");
+		if (philo->id %2 == 0)
+		{
+			ft_take_fork(philo);		
+			ft_take_fork2(philo);
+		}
+		else
+		{
+			ft_take_fork2(philo);		
+			ft_take_fork(philo);		
+		}
+		ft_eating(philo);
+
 		if (ft_action(philo, philo->data->tte))
 			break ;
-
 		
 		pthread_mutex_unlock(philo->fork);
 		pthread_mutex_unlock(philo->next->fork);
 		
-		printf("%ld Philo n %d finished eating\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
-
-		philo->meals_eaten++;
-		
-		// if (philo->time_lst_meal - end_meal < 0) // maybe put that somewhere else
-		// {
-		// 	philo->time_of_death = ft_get_time_in_ms();
-		// 	printf("%ld Philo n %d is dead\n", philo->time_of_death, philo->id);
-		// 	exit(EXIT_SUCCESS);
-		// }
-		printf("%ld Philo n %d is sleeping\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
+		ft_sleeping(philo);
 		
 		if (ft_action(philo, philo->data->tts))
-		{
 			break ;
-		}
-		printf("%ld Philo n %d is thinking\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
-		
+			
+		ft_thinking(philo);
 	}
+	philo->data->simulation_over = 1;
 }
 
 int	ft_action(t_philo *philo, long time)
@@ -81,52 +91,76 @@ int	ft_action(t_philo *philo, long time)
 
 	current = ft_get_time_in_ms();
 
+	// if (philo->meals_eaten == philo->data->total_meals || philo->data->dead_flag == 1)
+	// {
+	// 	pthread_mutex_unlock(philo->fork);
+	// 	pthread_mutex_unlock(philo->next->fork);
+	// 	return (1);
+	// }
 	while((long)ft_get_time_in_ms() - current < time)
 	{
-		// pthread_mutex_lock(philo->data->meal_lock);
-		if (ft_get_time_in_ms() - philo->time_lst_meal >= philo->data->ttd)
+		// printf("dead flag is %d\n", philo->data->dead_flag);
+		// printf("full flag is %d\n", philo->data->full_flag);
+		if (ft_get_time_in_ms() - philo->time_lst_meal >= philo->data->ttd && !philo->data->dead_flag)
 		{
 			philo->data->dead_flag = 1;
 			philo->data->dead_philo_id = philo->id;
-			// pthread_mutex_unlock(philo->data->meal_lock);
 			pthread_mutex_unlock(philo->fork);
 			pthread_mutex_unlock(philo->next->fork);
 			return (1);
 		}
-		// if (philo->data->dead_flag)
-		// {
-		// 	// pthread_mutex_unlock(philo->data->meal_lock);
-		// 	pthread_mutex_unlock(philo->fork);
-		// 	pthread_mutex_unlock(philo->next->fork);
-		// 	return (1);
-		// }
-		// pthread_mutex_unlock(philo->data->meal_lock);
+		else if (philo->data->dead_flag) // voir version sans 2nd if et 2e condition du 1er if 
+		{
+			pthread_mutex_unlock(philo->fork);
+			pthread_mutex_unlock(philo->next->fork);
+			return (1);
+		}
+		else if (philo->data->full_flag) // revoir ca car c est inutile la 
+		{
+			pthread_mutex_unlock(philo->fork);
+			pthread_mutex_unlock(philo->next->fork);
+			return (1);		
+		}
+		usleep(100);
 	}
 	return (0);
 }
 
-// void	*routine_check(void *arg)
-// {
-	
-// }
+void	*routine_check(void *arg)
+{
+	t_philo *philo;
+	t_data	*data;
 
-// int	open_thread_monitor(t_data *data, t_philo *philo)
-// {
-// 	pthread_t monitor;
-	
-// 	if(pthread_create(monitor, NULL, &routine_check, philo));
-// 	{
-// 	perror("Failed to create thread\n");
-// 	return (1);
-// 	}
-// 	while(philo)
-// 	{
-		
-// 	}
-// 	if (pthread_join(philo->thread, NULL) != 0)
-// 		return (1);
-// }
-
+	philo = (t_philo *)arg;
+	data = philo->data;
+	int i;
+	i = 0;
+	while(1) //!data->dead_flag && !data->full_flag)
+	{
+		if (ft_get_time_in_ms() - philo->time_lst_meal > data->ttd)
+		{
+			pthread_mutex_lock(philo->data->dead_lock);
+			data->dead_flag = 1;
+			philo->data->dead_philo_id = philo->id;
+			pthread_mutex_unlock(philo->data->dead_lock);
+			usleep(100);
+			ft_death(philo);
+			break ;
+		}
+		if(philo->meals_eaten == philo->data->total_meals && philo->data->total_meals != 0)
+			i++;
+		if (i == philo->data->philo_nb)
+		{
+			pthread_mutex_lock(philo->data->full_lock);
+			data->full_flag = 1;
+			pthread_mutex_unlock(philo->data->full_lock);
+			ft_all_eaten(philo);
+			break ;
+		}
+		philo = philo->next;
+	}
+	return (NULL);
+}
 
 int	open_threads(t_data *data, t_philo *philo)
 {
@@ -136,27 +170,48 @@ int	open_threads(t_data *data, t_philo *philo)
 	data->start_time = ft_get_time_in_ms();
 	while (i <= data->philo_nb)
 	{
+		philo->time_lst_meal = data->start_time;
 		if (pthread_create(&philo->thread, NULL, &routine_philo, philo) != 0)
 		{
 			perror("Failed to create thread\n");
 			return (1);
 		}
-		printf("thread number %d has started\n", i);
 		philo = philo->next;
 		i++;
+	}
+	if (data->philo_nb > 1)
+	{
+		if (pthread_create(&data->monitor, NULL, &routine_check, philo))
+		{
+			perror("Failed to create thread\n");
+			return (1);
+		}
 	}
 	i = 1;
 	while (i <= data->philo_nb)
 	{
 		if (pthread_join(philo->thread, NULL) != 0)
 				return (1);
-		printf("thread number %d has finished execution\n", i);
 		philo = philo->next;
 		i++;
 	}
-	if (data->dead_flag == 1) // faire le dead thing ici plutot que dans la routine
-	{
-		printf("%ld Philo n %d died\n", ft_get_time_in_ms() - data->start_time, philo->data->dead_philo_id);
-	}
+	if (data->philo_nb > 1)
+		if (pthread_join(data->monitor, NULL) != 0)
+			return (1);
 	return (0);
 }
+
+// int join_threads(t_data *data, t_philo *philo)
+// {
+// 	int	i;
+	
+// 	i = 1;
+// 	while (i <= data->philo_nb)
+// 	{
+// 		if (pthread_join(philo->thread, NULL) != 0)
+// 				return (1);
+// 		philo = philo->next;
+// 		i++;
+// 	}	
+// 	return (0);
+// }

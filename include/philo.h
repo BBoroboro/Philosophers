@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:24:08 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/15 15:57:58 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:42:08 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,45 +20,21 @@
 // define
 
 // structs
-
-// typedef struct s_data	t_data;
-/// revoir les struct comme LEON <3 !! seulement une liste chaine et pointe sur les data communes
-// typedef struct s_philo
-// {
-// 	int	index;
-// 	int	meals_eaten;
-// 	pthread_t thread;
-// 	pthread_mutex_t	*fork;
-// 	int ttd;
-// 	int tte;
-// 	int tts;
-// 	int dead;
-// 	int number_of_times_each_philosopher_must_eat;
-// 	struct s_philo *next;
-// 	t_data *data;
-// }		t_philo;
-
-// typedef struct s_data
-// {
-// 	int 	philo_nb;
-// 	int		dead_flag;
-// 	int number_of_times_each_philosopher_must_eat;
-// 	t_philo	**philo_lst; 
-// 	pthread_mutex_t	*meal_lock;
-// 	pthread_mutex_t	*write_lock;
-// }		t_data; 
-
 typedef struct s_data
 {
-	int philo_nb;
-	int dead_philo_id;
 	long	start_time;
+	int simulation_over;
+	int philo_nb;
 	int dead_flag;
+	int dead_philo_id;
+	int	full_flag;
 	int ttd;
 	int tte;
 	int tts;
 	int total_meals;
-	pthread_mutex_t	*meal_lock;
+	pthread_t monitor;
+	pthread_mutex_t *full_lock;
+	pthread_mutex_t *dead_lock;
 	pthread_mutex_t	*write_lock;
 }	t_data;
 
@@ -70,6 +46,7 @@ typedef struct s_philo
 	int meals_eaten;
 	pthread_t thread;
 	pthread_mutex_t *fork;
+	pthread_mutex_t	*meal_lock;
 	struct s_philo *next;
 	t_data *data;
 }	t_philo;
@@ -95,10 +72,21 @@ void	init_philo(char **av, t_data *data, t_philo **philo_lst);
 void	init_philo_lst(t_data *data);
 // int	init_mutex(t_data *data, t_philo *philo_lst);
 int	init_mutex(t_philo *philo_lst);
+void init_monitor(t_data *data, t_philo *philo);
 
 //threads.c
 int	open_threads(t_data *data, t_philo *philo);
+int join_threads(t_data *data, t_philo *philo);
 void	ft_simulation(t_philo *philo);
+
+//actions.c
+void	ft_take_fork(t_philo *philo);
+void	ft_take_fork2(t_philo *philo);
+void	ft_eating(t_philo *philo);
+void	ft_sleeping(t_philo *philo);
+void	ft_thinking(t_philo *philo);
+void	ft_death(t_philo *philo);
+void	ft_all_eaten(t_philo *philo);
 
 //get_time.c
 long ft_get_time_in_ms(void);

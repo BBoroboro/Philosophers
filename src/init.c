@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:47:53 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/15 18:33:26 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:30:00 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void fill_philo_lst(t_data *data, t_philo **first_philo)
 		}
 		new_philo->id = i;
 		new_philo->data = data;
-        if (!new_philo->data) {
+        if (!new_philo->data) // this isnt useful is it?
+		{
             ft_free_lst(*first_philo, data);
             return;
         }
@@ -64,6 +65,16 @@ void fill_philo_lst(t_data *data, t_philo **first_philo)
 	}
 	prev_philo->next = *first_philo;
 }
+
+// void init_monitor(t_philo *philo)
+// {
+// 	t_philo *monitor;
+	
+// 	monitor = ft_calloc(1, sizeof(t_philo));
+// 	if (!monitor)
+// 		return;
+// 	monitor->data = data;
+// }
 
 int init_mutex(t_philo *philo)
 {
@@ -81,14 +92,32 @@ int init_mutex(t_philo *philo)
 		philo = philo->next;
 		i++;
 	}
-	philo->data->meal_lock = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(philo->data->meal_lock, NULL))
+	i = 1;
+	while (i <= philo->data->philo_nb)
+	{
+		philo->meal_lock = malloc(sizeof(pthread_mutex_t));
+		if (pthread_mutex_init(philo->meal_lock, NULL))
+		{
+			ft_destroy_mutex(philo);
+			return (1);
+		}
+		philo = philo->next;
+		i++;
+	}
+	philo->data->write_lock = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->write_lock, NULL))
 	{
 		ft_destroy_mutex(philo);
 		return (1);
 	}
-	philo->data->write_lock = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(philo->data->write_lock, NULL))
+	philo->data->dead_lock = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->dead_lock, NULL))
+	{
+		ft_destroy_mutex(philo);
+		return (1);
+	}
+	philo->data->full_lock = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->full_lock, NULL))
 	{
 		ft_destroy_mutex(philo);
 		return (1);
