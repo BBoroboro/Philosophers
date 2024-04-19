@@ -6,13 +6,11 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:46:35 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/12 16:54:29 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:39:26 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-// long	get_elapsed_time()
 
 long ft_get_time_in_ms(void)
 {

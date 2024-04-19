@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:31:12 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/06 12:25:23 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:15:13 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	control_args(int ac,char **av)
 	if (control_if_pos(av))
 		return(1);
 	if (control_philo_nb(av))
+		return (1);
+	if (control_limits(av))
 		return (1);
 	return (0);
 }
@@ -73,4 +75,18 @@ int control_args_symb(char **av)
 		i++;
 	}
 	return(0);
+}
+
+int	control_limits(char **av)
+{
+	int i;
+
+	i = 1;
+	while(av[i])
+	{
+		if(ft_atoi(av[i]) > 2147483647)
+			return(1);
+		i++;
+	}
+	return (0);
 }

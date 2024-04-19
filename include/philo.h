@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:24:08 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/17 17:42:08 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:38:26 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	control_args_nb(int ac);
 int control_args_symb(char **av);
 int control_philo_nb(char **av);
 int control_if_pos(char **av);
+int	control_limits(char **av);
 
 //init.c
 void	fill_philo_lst(t_data *data, t_philo **philo_lst);
@@ -87,6 +88,11 @@ void	ft_sleeping(t_philo *philo);
 void	ft_thinking(t_philo *philo);
 void	ft_death(t_philo *philo);
 void	ft_all_eaten(t_philo *philo);
+
+//philo_sync.c
+void	ft_philo_even_case(t_philo *philo);
+void	ft_philo_odd_case(t_philo *philo);
+
 
 //get_time.c
 long ft_get_time_in_ms(void);

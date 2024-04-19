@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:24:21 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/17 18:01:31 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:39:22 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	ft_one_philo(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork);
 	pthread_mutex_lock(philo->data->write_lock);
-	printf("%ld Philo %d has taken a fork\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
+	printf("%ld %d has taken a fork\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(philo->data->write_lock);
 	pthread_mutex_unlock(philo->fork);
 	usleep(philo->data->ttd * 1000);
 	
 	pthread_mutex_lock(philo->data->write_lock);
-	printf("%ld Philo %d died\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
+	printf("%ld %d died\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(philo->data->write_lock);
 }
 
@@ -52,22 +52,24 @@ void	*routine_philo(void *arg)
 
 void	ft_simulation(t_philo *philo)
 {	
-	//printf("TEST\n");
 	//while(philo->data->total_meals == 0 || philo->meals_eaten < philo->data->total_meals) // another condition if meals eaten isnt in the parameters
 	while(philo->data->dead_flag == 0 && philo->data->full_flag == 0)
-	{	
-		//printf("TEST\n");
-		if (philo->id %2 == 0)
-		{
-			ft_take_fork(philo);		
-			ft_take_fork2(philo);
-		}
+	{
+		if (philo->data->philo_nb % 2 == 0)
+			ft_philo_even_case(philo);
 		else
-		{
-			ft_take_fork2(philo);		
-			ft_take_fork(philo);		
-		}
-		ft_eating(philo);
+			ft_philo_odd_case(philo);
+		// if (philo->id %2 == 0)
+		// {
+		// 	ft_take_fork(philo);		
+		// 	ft_take_fork2(philo);
+		// }
+		// else
+		// {
+		// 	ft_take_fork2(philo);		
+		// 	ft_take_fork(philo);		
+		// }
+		// ft_eating(philo);
 
 		if (ft_action(philo, philo->data->tte))
 			break ;
@@ -82,7 +84,7 @@ void	ft_simulation(t_philo *philo)
 			
 		ft_thinking(philo);
 	}
-	philo->data->simulation_over = 1;
+	philo->data->simulation_over = 1; // wait, i dont need that anymore
 }
 
 int	ft_action(t_philo *philo, long time)
@@ -90,17 +92,8 @@ int	ft_action(t_philo *philo, long time)
 	long current;
 
 	current = ft_get_time_in_ms();
-
-	// if (philo->meals_eaten == philo->data->total_meals || philo->data->dead_flag == 1)
-	// {
-	// 	pthread_mutex_unlock(philo->fork);
-	// 	pthread_mutex_unlock(philo->next->fork);
-	// 	return (1);
-	// }
 	while((long)ft_get_time_in_ms() - current < time)
 	{
-		// printf("dead flag is %d\n", philo->data->dead_flag);
-		// printf("full flag is %d\n", philo->data->full_flag);
 		if (ft_get_time_in_ms() - philo->time_lst_meal >= philo->data->ttd && !philo->data->dead_flag)
 		{
 			philo->data->dead_flag = 1;
@@ -143,7 +136,7 @@ void	*routine_check(void *arg)
 			data->dead_flag = 1;
 			philo->data->dead_philo_id = philo->id;
 			pthread_mutex_unlock(philo->data->dead_lock);
-			usleep(100);
+			usleep(2000);
 			ft_death(philo);
 			break ;
 		}
