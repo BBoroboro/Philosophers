@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:31:34 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/19 11:48:33 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:41:12 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_philo_even_case(t_philo *philo)
 			ft_take_fork2(philo);		
 			ft_take_fork(philo);		
 		}
-		ft_eating(philo);
+		//ft_eating(philo);
 }
 
 void	ft_philo_odd_case(t_philo *philo)
@@ -44,5 +44,5 @@ void	ft_philo_odd_case(t_philo *philo)
 			ft_take_fork2(philo);		
 			ft_take_fork(philo);
 		}
-		ft_eating(philo);
+		//ft_eating(philo);
 }

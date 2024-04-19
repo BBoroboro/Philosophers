@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:24:21 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/19 11:39:22 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:05:53 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,21 @@ void	ft_simulation(t_philo *philo)
 	//while(philo->data->total_meals == 0 || philo->meals_eaten < philo->data->total_meals) // another condition if meals eaten isnt in the parameters
 	while(philo->data->dead_flag == 0 && philo->data->full_flag == 0)
 	{
-		if (philo->data->philo_nb % 2 == 0)
-			ft_philo_even_case(philo);
-		else
-			ft_philo_odd_case(philo);
-		// if (philo->id %2 == 0)
-		// {
-		// 	ft_take_fork(philo);		
-		// 	ft_take_fork2(philo);
-		// }
+		// if (philo->data->philo_nb % 2 == 0) // voir parce que j ai pas mal d erreur sur les meal depuis ca
+		// 	ft_philo_even_case(philo);
 		// else
-		// {
-		// 	ft_take_fork2(philo);		
-		// 	ft_take_fork(philo);		
-		// }
-		// ft_eating(philo);
+		// 	ft_philo_odd_case(philo);
+		if (philo->id %2 == 0)
+		{
+			ft_take_fork(philo);		
+			ft_take_fork2(philo);
+		}
+		else
+		{
+			ft_take_fork2(philo);		
+			ft_take_fork(philo);		
+		}
+		ft_eating(philo);
 
 		if (ft_action(philo, philo->data->tte))
 			break ;
@@ -92,28 +92,29 @@ int	ft_action(t_philo *philo, long time)
 	long current;
 
 	current = ft_get_time_in_ms();
+	(void) philo;
 	while((long)ft_get_time_in_ms() - current < time)
 	{
-		if (ft_get_time_in_ms() - philo->time_lst_meal >= philo->data->ttd && !philo->data->dead_flag)
-		{
-			philo->data->dead_flag = 1;
-			philo->data->dead_philo_id = philo->id;
-			pthread_mutex_unlock(philo->fork);
-			pthread_mutex_unlock(philo->next->fork);
-			return (1);
-		}
-		else if (philo->data->dead_flag) // voir version sans 2nd if et 2e condition du 1er if 
-		{
-			pthread_mutex_unlock(philo->fork);
-			pthread_mutex_unlock(philo->next->fork);
-			return (1);
-		}
-		else if (philo->data->full_flag) // revoir ca car c est inutile la 
-		{
-			pthread_mutex_unlock(philo->fork);
-			pthread_mutex_unlock(philo->next->fork);
-			return (1);		
-		}
+		// if (ft_get_time_in_ms() - philo->time_lst_meal >= philo->data->ttd && !philo->data->dead_flag)
+		// {
+		// 	philo->data->dead_flag = 1;
+		// 	philo->data->dead_philo_id = philo->id;
+		// 	pthread_mutex_unlock(philo->fork);
+		// 	pthread_mutex_unlock(philo->next->fork);
+		// 	return (1);
+		// }
+		// else if (philo->data->dead_flag) // voir version sans 2nd if et 2e condition du 1er if 
+		// {
+		// 	pthread_mutex_unlock(philo->fork);
+		// 	pthread_mutex_unlock(philo->next->fork);
+		// 	return (1);
+		// }
+		// else if (philo->data->full_flag) // revoir ca car c est inutile la 
+		// {
+		// 	pthread_mutex_unlock(philo->fork);
+		// 	pthread_mutex_unlock(philo->next->fork);
+		// 	return (1);		
+		// }
 		usleep(100);
 	}
 	return (0);

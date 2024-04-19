@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:50:04 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/19 11:53:32 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:38:02 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	ft_take_fork(t_philo *philo)
 {
+	if (philo->data->dead_flag == 1)
+		return ;
 	//ajouter des control de death flag sur toutes actions 
 	pthread_mutex_lock(philo->fork);
 	pthread_mutex_lock(philo->data->write_lock);
@@ -23,6 +25,8 @@ void	ft_take_fork(t_philo *philo)
 
 void	ft_take_fork2(t_philo *philo)
 {
+	if (philo->data->dead_flag == 1)
+		return ;
 	//ajouter des control de death flag sur toutes actions 
 	pthread_mutex_lock(philo->next->fork);
 	pthread_mutex_lock(philo->data->write_lock);
@@ -32,6 +36,8 @@ void	ft_take_fork2(t_philo *philo)
 
 void	ft_eating(t_philo *philo)
 {
+	if (philo->data->dead_flag == 1)
+		return ;
 	//ajouter des control de death flag sur toutes actions 
 	pthread_mutex_lock(philo->meal_lock);
 	printf("%ld %d is eating\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
@@ -42,6 +48,8 @@ void	ft_eating(t_philo *philo)
 
 void	ft_sleeping(t_philo *philo)
 {
+	if (philo->data->dead_flag == 1)
+		return ;
 	//ajouter des control de death flag sur toutes actions 
 	pthread_mutex_lock(philo->data->write_lock);
 	printf("%ld %d is sleeping\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
@@ -50,6 +58,8 @@ void	ft_sleeping(t_philo *philo)
 
 void	ft_thinking(t_philo *philo)
 {
+	if (philo->data->dead_flag == 1)
+		return ;
 	pthread_mutex_lock(philo->data->write_lock);
 	printf("%ld %d is thinking\n", ft_get_time_in_ms() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(philo->data->write_lock);	
