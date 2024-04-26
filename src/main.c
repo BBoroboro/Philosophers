@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:23:40 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/17 16:28:24 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:13:43 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ https://www.codequoi.com/threads-mutex-et-programmation-concurrente-en-c/
 
 */
 
-void	*routine()
-{
-	printf("Test from thread\n");
-	sleep(3);
-	printf("Ending thread\n");
-	return 0;
-}
+// void	*routine()
+// {
+// 	printf("Test from thread\n");
+// 	sleep(3);
+// 	printf("Ending thread\n");
+// 	return 0;
+// }
 int	main(int ac, char **av)
 {
 	t_data data;
@@ -45,7 +45,6 @@ int	main(int ac, char **av)
 	//printf("the program start at %ld millisec\n", philo_lst->data->start_time);
 	init_mutex(philo_lst);
 	open_threads(&data, philo_lst);
-	
 	//ft_destroy_mutex(philo_lst);
 	free_all(philo_lst, &data);
 	return (0);

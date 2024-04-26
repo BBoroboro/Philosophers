@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:47:53 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/17 16:30:00 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:25:47 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,18 @@ int init_mutex(t_philo *philo)
 	}
 	philo->data->write_lock = malloc(sizeof(pthread_mutex_t));
 	if (pthread_mutex_init(philo->data->write_lock, NULL))
+	{
+		ft_destroy_mutex(philo);
+		return (1);
+	}
+	philo->data->finished_meal = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->finished_meal, NULL))
+	{
+		ft_destroy_mutex(philo);
+		return (1);
+	}
+	philo->data->last_meal = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(philo->data->last_meal, NULL))
 	{
 		ft_destroy_mutex(philo);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:24:08 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/19 11:38:26 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:26:02 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ typedef struct s_data
 	int tte;
 	int tts;
 	int total_meals;
+	int finished_eating;
 	pthread_t monitor;
-	pthread_mutex_t *full_lock;
+	pthread_mutex_t *last_meal;
+	pthread_mutex_t *finished_meal;
+	pthread_mutex_t *full_lock; // lr dead_ock peut faire ca
 	pthread_mutex_t *dead_lock;
 	pthread_mutex_t	*write_lock;
 }	t_data;

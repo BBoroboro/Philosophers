@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 11:50:45 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/17 16:30:42 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:00:00 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_free_philos_data(t_philo *philo)
 	j = philo->data->philo_nb;
 	while (i < j)
 	{
-		printf("%d\n", i);
+		//printf("%d\n", i);
 		free(philo->data);
 		philo = philo->next;
 		i++;
@@ -87,10 +87,20 @@ void	ft_free_mutex(t_data *data, t_philo *philo)
 		pthread_mutex_destroy(data->write_lock);
 		free(data->write_lock);
 	}
+	if (data->finished_meal)
+	{
+		pthread_mutex_destroy(data->finished_meal);
+		free(data->finished_meal);
+	}
 	if (data->dead_lock)
 	{
 		pthread_mutex_destroy(data->dead_lock);
 		free(data->dead_lock);
+	}
+	if (data->last_meal)
+	{
+		pthread_mutex_destroy(data->last_meal);
+		free(data->last_meal);
 	}
 	if (data->full_lock)
 	{
