@@ -1,32 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/05 11:23:40 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/26 18:30:10 by mamoulin         ###   ########.fr       */
+/*   Created: 2024/04/05 14:25:51 by mamoulin          #+#    #+#             */
+/*   Updated: 2024/04/29 10:31:04 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int ac, char **av)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	t_data	data;
-	t_philo	*philo_lst;
+	char	*str;
 
-	philo_lst = NULL;
-	ft_memset(&data, 0, sizeof(t_data));
-	if (control_args(ac, av) == 1)
+	str = s;
+	while (n)
 	{
-		write(2, "Error: wrong arguments\n", 23);
-		return (1);
+		*str = (unsigned char)c;
+		str++;
+		n--;
 	}
-	init_philo(av, &data, &philo_lst);
-	init_mutex(philo_lst);
-	open_threads(&data, philo_lst);
-	free_all(philo_lst, &data);
-	return (0);
+	return (s);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*dest;
+
+	if (nmemb && size > (size_t)-1 / nmemb)
+		return (NULL);
+	dest = (void *)malloc(nmemb * size);
+	if (!dest)
+		return (NULL);
+	ft_bzero(dest, nmemb * size);
+	return (dest);
 }

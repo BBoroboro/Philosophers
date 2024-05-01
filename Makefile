@@ -6,19 +6,26 @@
 #    By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 16:03:47 by mamoulin          #+#    #+#              #
-#    Updated: 2024/04/19 11:31:56 by mamoulin         ###   ########.fr        #
+#    Updated: 2024/04/30 18:09:01 by mamoulin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC1 = ./src/main.c \
 		./src/parsing.c \
+		./src/parsing2.c \
 		./src/init.c \
 		./src/free_functions.c \
+		./src/free_functions2.c \
 		./src/threads.c \
+		./src/routine.c \
+		./src/routine2.c \
 		./src/get_time.c \
 		./src/actions.c \
+		./src/actions2.c \
 		./src/philo_sync.c \
-		./src/utils.c 
+		./src/utils.c \
+		./src/utils2.c \
+		./src/check.c \
 
 SRC2 =	
 

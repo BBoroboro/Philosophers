@@ -6,7 +6,7 @@
 /*   By: mamoulin <mamoulin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 14:25:51 by mamoulin          #+#    #+#             */
-/*   Updated: 2024/04/15 11:22:23 by mamoulin         ###   ########.fr       */
+/*   Updated: 2024/04/29 10:28:26 by mamoulin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_print_lst(t_philo *philo_lst, t_data *data)
 {
-	t_philo *philo;
-	int i;
+	t_philo	*philo;
+	int		i;
 
 	if (!philo_lst)
 		return ;
@@ -34,7 +34,7 @@ void	ft_print_lst(t_philo *philo_lst, t_data *data)
 int	ft_lst_size(t_philo **philo_lst)
 {
 	size_t	i;
-	t_philo *philo;
+	t_philo	*philo;
 
 	if (!philo_lst)
 		return (0);
@@ -73,53 +73,21 @@ long	ft_atoi(const char *str)
 	return (sign * result);
 }
 
-void	*ft_memset(void *s, int c, size_t n)
-{
-	char	*str;
+// void	*ft_memcpy(void *dest, const void *src, size_t n) // do i really use it?
+// {
+// 	size_t i;
+// 	char *dst;
 
-	str = s;
-	while (n)
-	{
-		*str = (unsigned char)c;
-		str++;
-		n--;
-	}
-	return (s);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*dest;
-
-	if (nmemb && size > (size_t) - 1 / nmemb)
-		return (NULL);
-	dest = (void *)malloc(nmemb * size);
-	if (!dest)
-		return (NULL);
-	ft_bzero(dest, nmemb * size);
-	return (dest);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	size_t	i;
-	char	*dst;
-
-	if (!dest && !src)
-		return (NULL);
-	dst = (char *)dest;
-	i = 0;
-	while (i < n)
-	{
-		*dst = (*(char *)src);
-		dst++;
-		src++;
-		i++;
-	}
-	return (dest);
-}
+// 	if (!dest && !src)
+// 		return (NULL);
+// 	dst = (char *)dest;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		*dst = (*(char *)src);
+// 		dst++;
+// 		src++;
+// 		i++;
+// 	}
+// 	return (dest);
+// }
